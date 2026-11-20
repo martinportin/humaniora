@@ -1,0 +1,28 @@
+openapi: 3.2.0
+info:
+  title: Filosofia
+  version: 0.0.1
+  description: |
+    # Welome to the Filosofia API
+  termsOfService:
+  contact:
+    name:
+    email:
+  license:
+    name: Attribution-NonCommercial-ShareAlike 4.0 International
+    url: https://github.com/martinportin/filosofia/blob/main/LICENSE.md
+servers:
+paths:
+  /philosophers:
+    summary: Retrieve philosophers collection
+    description: Operations for retrieving collection of philosophers
+  get:
+    tags: []
+    summary: List all philosophers
+    description: |
+      Retrieve a list of philosophers
+    operationId: listPhilosophers
+    parameters:
+    responses:
+components:
+security:
