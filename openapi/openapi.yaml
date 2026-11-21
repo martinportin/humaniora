@@ -1,28 +1,141 @@
 openapi: 3.2.0
 info:
-  title: Filosofia
+  title: Humaniora API
   version: 0.0.1
-  description: |
-    # Welome to the Filosofia API
-  termsOfService:
-  contact:
-    name:
-    email:
-  license:
-    name: Attribution-NonCommercial-ShareAlike 4.0 International
-    url: https://github.com/martinportin/filosofia/blob/main/LICENSE.md
+  description: API for literature, essays, poetry etc.
 servers:
+  - url: http://localhost:8080/api/v1
 paths:
-  /philosophers:
-    summary: Retrieve philosophers collection
-    description: Operations for retrieving collection of philosophers
-  get:
-    tags: []
-    summary: List all philosophers
-    description: |
-      Retrieve a list of philosophers
-    operationId: listPhilosophers
-    parameters:
-    responses:
+  /philosophers/{philosopher}/works/{work}:
+    get:
+      tags:
+        - Works
+      summary: Get a specific work by a philosopher
+      description: Retrieve a specific work by a philosopher
+      parameters:
+        - name: philosopher
+          in: path
+          required: true
+          description: Name of the philosopher
+          schema:
+            type: string
+        - name: work
+          in: path
+          required: true
+          description: Title of the work
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WorkResponse"
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
 components:
-security:
+  schemas:
+    WorkResponse:
+      type: object
+      required: [title, author, publisher, yearOfPublication, content]
+      properties:
+        title:
+          type: string
+          description: Title of the work
+          example: "Tractatus logico-philosophicus"
+        author:
+          type: string
+          description: Author of the work
+          example: "Ludwig Wittgenstein"
+        yearOfPublication:
+          type: string
+          format: date
+          description: Publication date of the work
+          example: "1921-01-01"
+        publisher:
+          type: string
+          description: Publisher of the work
+          example: "Routledge & Kegan Paul"
+        translator:
+          type: string
+          description: Translator of the work
+          example: "C. K. Ogden"
+        releaseDate:
+          type: string
+          format: date
+          description: Release date of the work
+          example: "1921-01-01"
+        source:
+          type: string
+          description: Source of the work
+          example: "https://www.gutenberg.org/ebooks/5740"
+        content:
+          type: object
+          properties:
+            paragraphs:
+              type: array
+              items:
+                $ref: "#/components/schemas/Paragraph"
+            notes:
+              type: array
+              items:
+                $ref: "#/components/schemas/Note"
+    Paragraph:
+      type: object
+      required: [id, number, text]
+      properties:
+        id:
+          type: integer
+          description: Unique identifier for the paragraph
+          example: 1
+        number:
+          type: string
+          description: Paragraph number
+          example: "1"
+        text:
+          type: string
+          description: Text of the paragraph
+          example: "The world is everything that is the case."
+        notes:
+          type: array
+          items:
+            oneOf:
+              - type: string
+                description: Note text
+                example: "*"
+              - type: number
+                description: Note number
+                example: 1
+    Note:
+      type: object
+      required: [id, number, text]
+      properties:
+        id:
+          type: integer
+          description: Unique identifier for the note
+          example: 1
+        number:
+          anyOf:
+            - type: string
+              description: Note number
+              example: "*"
+            - type: integer
+              description: Note number
+              example: 1
+        text:
+          type: string
+          description: Text of the note
+          example: "This is a note."
+    ErrorResponse:
+      type: object
+      required: [error]
+      properties:
+        error:
+          type: string
+          description: Error message
+          example: "Work not found"
