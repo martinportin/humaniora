@@ -10,7 +10,7 @@ paths:
     get:
       tags:
         - Works
-      summary: Read selected work
+      summary: Get a specific work by a philosopher
       description: Retrieve a specific work by a philosopher
       parameters:
         - name: philosopher
