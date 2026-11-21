@@ -11,7 +11,20 @@ paths:
       tags:
         - Works
       summary: Read selected work
-      description: Uses the HTTP GET method to retrieve the selected work
+      description: Retrieve a specific work by a philosopher
+      parameters:
+        - name: philosopher
+          in: path
+          required: true
+          description: Name of the philosopher
+          schema:
+            type: string
+        - name: work
+          in: path
+          required: true
+          description: Title of the work
+          schema:
+            type: string
       responses:
         "200":
           description: Successful response
